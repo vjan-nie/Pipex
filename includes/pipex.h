@@ -6,7 +6,7 @@
 /*   By: vjan-nie <vjan-nie@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/16 15:29:05 by vjan-nie          #+#    #+#             */
-/*   Updated: 2025/05/05 18:49:11 by vjan-nie         ###   ########.fr       */
+/*   Updated: 2025/05/06 13:30:38 by vjan-nie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,5 +19,10 @@
 # include <stdio.h> // perror !! careful with printf!!
 # include <string.h> // strerror
 # include <sys/wait.h> // wait, waitpid
+# include "libft.h"
+
+int		ft_check_command(char *command, char **envp);
+char	*ft_get_full_path(char *command, char **envp);
+void	ft_free_split(char **split);
 
 #endif
