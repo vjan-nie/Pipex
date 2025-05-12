@@ -6,7 +6,7 @@
 /*   By: vjan-nie <vjan-nie@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/05 12:53:55 by vjan-nie          #+#    #+#             */
-/*   Updated: 2025/05/06 13:43:42 by vjan-nie         ###   ########.fr       */
+/*   Updated: 2025/05/12 14:36:44 by vjan-nie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 
 int	main(int argc, char **argv, char **envp)
 {
-	int		fd[2];
+	int		pipe_fd[2];
 	int		pid1;
 	int		pid2;
 	int 	infile_fd;
@@ -30,7 +30,7 @@ int	main(int argc, char **argv, char **envp)
 		exit(1);
 		return (0);
 	}
-	if (pipe(fd) == -1)
+	if (pipe(pipe_fd) == -1)
 	{
 		perror("fail to create pipe");
 		exit(1);
@@ -51,10 +51,10 @@ int	main(int argc, char **argv, char **envp)
 			exit(1);
 		}
 		dup2(infile_fd, 0);
-		dup2(fd[1], 1); //redirige salida estándar, duplica la salida
+		dup2(pipe_fd[1], 1); //redirige salida estándar, duplica la salida
 		close(infile_fd);
-		close(fd[0]); //no use -- We close the pipe on this process
-		close(fd[1]); // cerramos este porque está la estándar y esta abierta, y son copias?
+		close(pipe_fd[0]); //no use -- We close the pipe on this process
+		close(pipe_fd[1]); // cerramos este porque está la estándar y esta abierta, y son copias?
 		args1 = ft_split(argv[2], ' ');
 		cmd1 = ft_get_full_path(args1[0], envp);
 		if (!cmd1) //si falla, liberar memoria dentro de proceso hijo!
@@ -86,10 +86,10 @@ int	main(int argc, char **argv, char **envp)
 			exit(1);
 		}
 		dup2(outfile_fd, 1); //redirección salida estándar a outfile
-		dup2(fd[0], 0);
+		dup2(pipe_fd[0], 0);
 		close(outfile_fd);
-		close(fd[1]); //no use -- We close the pipe on this process
-		close(fd[0]); // it remains open despite being duplicated, so we need to close it?
+		close(pipe_fd[1]); //no use -- We close the pipe on this process
+		close(pipe_fd[0]); // it remains open despite being duplicated, so we need to close it?
 		args2 = ft_split(argv[3], ' ');
 		cmd2 = ft_get_full_path(args2[0], envp);
 		if (!cmd2)
@@ -103,8 +103,8 @@ int	main(int argc, char **argv, char **envp)
 		ft_free_split(args2);
 		exit(1);
 	}
-	close(fd[0]); // Si no cerramos todos los fd de lectura , incluyendo al padre, no para de leer
-	close(fd[1]);
+	close(pipe_fd[0]); // Si no cerramos todos los fd de lectura , incluyendo al padre, no para de leer
+	close(pipe_fd[1]);
 	waitpid(pid1, 0, 0);
 	waitpid(pid2, 0, 0);
 	return (0);
