@@ -6,7 +6,7 @@
 /*   By: vjan-nie <vjan-nie@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/06 12:13:47 by vjan-nie          #+#    #+#             */
-/*   Updated: 2025/05/13 18:00:45 by vjan-nie         ###   ########.fr       */
+/*   Updated: 2025/05/13 18:23:18 by vjan-nie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,11 +14,11 @@
 
 void	ft_free_split(char **split)
 {
-	int i;
+	int	i;
 
 	i = 0;
 	if (!split)
-		return;
+		return ;
 	while (split[i])
 	{
 		free(split[i]);
@@ -49,13 +49,9 @@ char	*ft_get_full_path(char *command, char **envp)
 		full_path = ft_strjoin(path, command);
 		free(path);
 		if (access(full_path, X_OK) == 0)
-		{
-			ft_free_split(paths);
-			return (full_path);
-		}
+			return (ft_free_split(paths), full_path);
 		free(full_path);
 		i ++;
 	}
-	ft_free_split(paths);
-	return (NULL);
+	return (ft_free_split(paths), NULL);
 }
