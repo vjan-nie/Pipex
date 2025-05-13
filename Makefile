@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: vjan-nie <vjan-nie@student.42madrid.com    +#+  +:+       +#+         #
+#    By: vjan-nie <vjan-nie@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/01/17 12:24:16 by vjan-nie          #+#    #+#              #
-#    Updated: 2025/05/06 13:33:38 by vjan-nie         ###   ########.fr        #
+#    Updated: 2025/05/13 18:03:17 by vjan-nie         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -31,8 +31,8 @@ LIBFT_INCLUDE	= -I$(LIBFT_DIR)/include
 # Source files
 
 SRC		=	$(SRC_DIR)/main.c\
-			$(SRC_DIR)/pipex_utils.c\
-			$(SRC_DIR)/get_path.c\
+			$(SRC_DIR)/pipex.c\
+			$(SRC_DIR)/pipex_utils.c
 
 # Objects
 

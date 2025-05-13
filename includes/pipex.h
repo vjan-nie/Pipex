@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   pipex.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: vjan-nie <vjan-nie@student.42madrid.com    +#+  +:+       +#+        */
+/*   By: vjan-nie <vjan-nie@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/16 15:29:05 by vjan-nie          #+#    #+#             */
-/*   Updated: 2025/05/06 13:30:38 by vjan-nie         ###   ########.fr       */
+/*   Updated: 2025/05/13 17:58:50 by vjan-nie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,8 +21,8 @@
 # include <sys/wait.h> // wait, waitpid
 # include "libft.h"
 
-int		ft_check_command(char *command, char **envp);
-char	*ft_get_full_path(char *command, char **envp);
+void	pipex(char **argv, char **envp, int *pipe_fd);
 void	ft_free_split(char **split);
+char	*ft_get_full_path(char *command, char **envp);
 
 #endif
