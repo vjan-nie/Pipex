@@ -3,14 +3,22 @@
 /*                                                        :::      ::::::::   */
 /*   pipex_utils.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: vjan-nie <vjan-nie@student.42.fr>          +#+  +:+       +#+        */
+/*   By: vjan-nie <vjan-nie@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/06 12:13:47 by vjan-nie          #+#    #+#             */
-/*   Updated: 2025/05/13 18:23:18 by vjan-nie         ###   ########.fr       */
+/*   Updated: 2025/05/14 11:17:20 by vjan-nie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "pipex.h"
+
+void	cmd_not_found(char *cmd, char **args)
+{
+	ft_putstr_fd(cmd, 2);
+	ft_putstr_fd(": command not found\n", 2);
+	ft_free_split(args);
+	exit(127);
+}
 
 void	ft_free_split(char **split)
 {

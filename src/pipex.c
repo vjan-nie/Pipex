@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   pipex.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: vjan-nie <vjan-nie@student.42.fr>          +#+  +:+       +#+        */
+/*   By: vjan-nie <vjan-nie@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/13 16:49:10 by vjan-nie          #+#    #+#             */
-/*   Updated: 2025/05/13 18:42:25 by vjan-nie         ###   ########.fr       */
+/*   Updated: 2025/05/14 11:28:57 by vjan-nie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,7 +29,7 @@ static void	ft_first_command(int *pipe_fd, char **argv, char **envp)
 	infile = open(argv[1], O_RDONLY);
 	if (infile < 0)
 	{
-		ft_printf("no such file or directory: %s\n", argv[1]);
+		perror(argv[1]);
 		exit(1);
 	}
 	dup2(infile, 0);
@@ -38,11 +38,7 @@ static void	ft_first_command(int *pipe_fd, char **argv, char **envp)
 	args = ft_split(argv[2], ' ');
 	cmd = ft_get_full_path(args[0], envp);
 	if (!cmd)
-	{
-		ft_free_split(args);
-		ft_printf("command not found: %s\n", cmd);
-		exit(127);
-	}
+		cmd_not_found(args[0], args);
 	execve(cmd, args, envp);
 	free(cmd);
 	ft_free_split(args);
@@ -57,7 +53,10 @@ static void	ft_second_command(int *pipe_fd, char **argv, char **envp)
 
 	outfile = open(argv[4], O_CREAT | O_WRONLY | O_TRUNC, 0644);
 	if (outfile < 0)
+	{
+		perror(argv[4]);
 		exit(1);
+	}
 	dup2(outfile, 1);
 	dup2(pipe_fd[0], 0);
 	close(outfile);
@@ -66,11 +65,7 @@ static void	ft_second_command(int *pipe_fd, char **argv, char **envp)
 	args = ft_split(argv[3], ' ');
 	cmd = ft_get_full_path(args[0], envp);
 	if (!cmd)
-	{
-		ft_free_split(args);
-		ft_printf("command not found: %s\n", cmd);
-		exit(127);
-	}
+		cmd_not_found(args[0], args);
 	execve(cmd, args, envp);
 	free(cmd);
 	ft_free_split(args);
@@ -84,15 +79,23 @@ void	pipex(char **argv, char **envp, int *pipe_fd)
 
 	pid1 = fork();
 	if (pid1 < 0)
-		exit(1);
+	{
+		perror("fork");
+		exit(EXIT_FAILURE);
+	}
 	if (pid1 == 0)
 		ft_first_command(pipe_fd, argv, envp);
 	pid2 = fork();
 	if (pid2 < 0)
-		exit(1);
+	{
+		perror("fork");
+		exit(EXIT_FAILURE);
+	}
 	if (pid2 == 0)
 		ft_second_command(pipe_fd, argv, envp);
 	close(pipe_fd[0]);
 	close(pipe_fd[1]);
+	waitpid(pid1, 0, 0);
+	waitpid(pid2, 0, 0);
 	return ;
 }
