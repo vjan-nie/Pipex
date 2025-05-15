@@ -6,7 +6,7 @@
 /*   By: vjan-nie <vjan-nie@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/06 12:13:47 by vjan-nie          #+#    #+#             */
-/*   Updated: 2025/05/14 11:17:20 by vjan-nie         ###   ########.fr       */
+/*   Updated: 2025/05/15 23:31:16 by vjan-nie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,11 +35,9 @@ void	ft_free_split(char **split)
 	free(split);
 }
 
-char	*ft_get_full_path(char *command, char **envp)
+char	**ft_build_path(char **envp)
 {
 	char	**paths;
-	char	*full_path;
-	char	*path;
 	int		i;
 
 	i = 0;
@@ -48,6 +46,18 @@ char	*ft_get_full_path(char *command, char **envp)
 	if (!envp[i])
 		return (NULL);
 	paths = ft_split(envp[i] + 5, ':');
+	return (paths);
+}
+
+char	*ft_get_full_path(char *command, char **envp)
+{
+	char	**paths;
+	char	*full_path;
+	char	*path;
+	int		i;
+
+	full_path = NULL;
+	paths = ft_build_path(envp);
 	if (!paths)
 		return (NULL);
 	i = 0;
@@ -59,7 +69,31 @@ char	*ft_get_full_path(char *command, char **envp)
 		if (access(full_path, X_OK) == 0)
 			return (ft_free_split(paths), full_path);
 		free(full_path);
+		full_path = NULL;
 		i ++;
 	}
 	return (ft_free_split(paths), NULL);
+}
+
+char	*ft_check_path(char *command, char **envp)
+{
+	char	*full_path;
+
+	if (ft_strchr(command, '/'))
+	{
+		full_path = ft_strdup(command);
+		if (access(full_path, X_OK) == 0)
+			return (full_path);
+		else
+		{
+			free(full_path);
+			return (NULL);
+		}
+	}
+	else
+	{
+		full_path = ft_get_full_path(command, envp);
+		return (full_path);
+	}
+	return (NULL);
 }

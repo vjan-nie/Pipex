@@ -6,7 +6,7 @@
 /*   By: vjan-nie <vjan-nie@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/13 16:49:10 by vjan-nie          #+#    #+#             */
-/*   Updated: 2025/05/14 11:28:57 by vjan-nie         ###   ########.fr       */
+/*   Updated: 2025/05/16 00:17:09 by vjan-nie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,6 +18,18 @@ static void	ft_close_three(int fd1, int fd2, int fd3)
 	close(fd2);
 	close(fd3);
 	return ;
+}
+
+static void	ft_wait_and_exit(int pid1, int pid2)
+{
+	int		status;
+
+	waitpid(pid1, 0, 0);
+	waitpid(pid2, &status, 0);
+	if (WIFEXITED(status))
+		exit(WEXITSTATUS(status));
+	else if (WIFSIGNALED(status))
+		exit(128 + WTERMSIG(status));
 }
 
 static void	ft_first_command(int *pipe_fd, char **argv, char **envp)
@@ -36,7 +48,7 @@ static void	ft_first_command(int *pipe_fd, char **argv, char **envp)
 	dup2(pipe_fd[1], 1);
 	ft_close_three(infile, pipe_fd[0], pipe_fd[1]);
 	args = ft_split(argv[2], ' ');
-	cmd = ft_get_full_path(args[0], envp);
+	cmd = ft_check_path(args[0], envp);
 	if (!cmd)
 		cmd_not_found(args[0], args);
 	execve(cmd, args, envp);
@@ -63,7 +75,7 @@ static void	ft_second_command(int *pipe_fd, char **argv, char **envp)
 	close(pipe_fd[1]);
 	close(pipe_fd[0]);
 	args = ft_split(argv[3], ' ');
-	cmd = ft_get_full_path(args[0], envp);
+	cmd = ft_check_path(args[0], envp);
 	if (!cmd)
 		cmd_not_found(args[0], args);
 	execve(cmd, args, envp);
@@ -81,7 +93,7 @@ void	pipex(char **argv, char **envp, int *pipe_fd)
 	if (pid1 < 0)
 	{
 		perror("fork");
-		exit(EXIT_FAILURE);
+		exit(1);
 	}
 	if (pid1 == 0)
 		ft_first_command(pipe_fd, argv, envp);
@@ -89,13 +101,12 @@ void	pipex(char **argv, char **envp, int *pipe_fd)
 	if (pid2 < 0)
 	{
 		perror("fork");
-		exit(EXIT_FAILURE);
+		exit(1);
 	}
 	if (pid2 == 0)
 		ft_second_command(pipe_fd, argv, envp);
 	close(pipe_fd[0]);
 	close(pipe_fd[1]);
-	waitpid(pid1, 0, 0);
-	waitpid(pid2, 0, 0);
-	return ;
+	ft_wait_and_exit(pid1, pid2);
+	exit(1);
 }

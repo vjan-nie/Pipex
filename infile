@@ -52,3 +52,21 @@ No command:
 ./pipex infile "lx -l" "wx -l" outfile
 
 + Valgrind!
+valgrind --trace-children=yes
+
+MÁS:
+
+Comando que existe y está en el PATH:
+
+valgrind ./pipex infile "ls -l" "wc -l" outfile
+
+Comando con ruta relativa válida:
+
+valgrind ./pipex infile "./a.out" "wc -l" outfile
+valgrind ./pipex infile "./a.out" "cat" outfile
+
+Ruta o comando inválidos:
+
+valgrind ./pipex infile "./no_existe" "wc -l" outfile
+
+valgrind ./pipex infile "no_such_cmd" "wc -l" outfile
