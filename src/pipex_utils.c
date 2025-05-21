@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   pipex_utils.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: vjan-nie <vjan-nie@student.42madrid.com    +#+  +:+       +#+        */
+/*   By: vjan-nie <vjan-nie@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/06 12:13:47 by vjan-nie          #+#    #+#             */
-/*   Updated: 2025/05/15 23:31:16 by vjan-nie         ###   ########.fr       */
+/*   Updated: 2025/05/21 11:32:49 by vjan-nie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,8 +14,9 @@
 
 void	cmd_not_found(char *cmd, char **args)
 {
+	ft_putstr_fd("command not found: ", 2);
 	ft_putstr_fd(cmd, 2);
-	ft_putstr_fd(": command not found\n", 2);
+	ft_putstr_fd("\n", 2);
 	ft_free_split(args);
 	exit(127);
 }

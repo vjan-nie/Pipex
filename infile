@@ -70,3 +70,7 @@ Ruta o comando inválidos:
 valgrind ./pipex infile "./no_existe" "wc -l" outfile
 
 valgrind ./pipex infile "no_such_cmd" "wc -l" outfile
+
+contrastar:
+< infile "./a.out" | cat > outfile
+< infile "./no_existe" | cat > outfile

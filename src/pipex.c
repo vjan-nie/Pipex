@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   pipex.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: vjan-nie <vjan-nie@student.42madrid.com    +#+  +:+       +#+        */
+/*   By: vjan-nie <vjan-nie@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/13 16:49:10 by vjan-nie          #+#    #+#             */
-/*   Updated: 2025/05/16 00:17:09 by vjan-nie         ###   ########.fr       */
+/*   Updated: 2025/05/21 11:30:42 by vjan-nie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,6 +30,7 @@ static void	ft_wait_and_exit(int pid1, int pid2)
 		exit(WEXITSTATUS(status));
 	else if (WIFSIGNALED(status))
 		exit(128 + WTERMSIG(status));
+	exit(EXIT_FAILURE);
 }
 
 static void	ft_first_command(int *pipe_fd, char **argv, char **envp)
